@@ -1,4 +1,6 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using GraphQLDemo.Repository;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Logging.AddConsole();
@@ -10,6 +12,8 @@ builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
     .AddMutationType<Mutation>();
+
+builder.Services.AddSingleton<BookRepository>();
 
 var app = builder.Build();
 
