@@ -1,4 +1,5 @@
-﻿using GraphQLDemo.Repository;
+﻿using GraphQLDemo.GraphQL;
+using GraphQLDemo.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,9 @@ builder.Services.AddSwaggerGen();
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
-    .AddMutationType<Mutation>();
+    .AddMutationType<Mutation>()
+    .AddSubscriptionType<Subscription>()
+    .AddInMemorySubscriptions();
 
 builder.Services.AddSingleton<BookRepository>();
 
@@ -28,6 +31,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
+app.UseWebSockets();
 app.MapGraphQL();
 
 app.Run();

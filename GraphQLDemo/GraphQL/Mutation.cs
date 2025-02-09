@@ -1,5 +1,6 @@
 ﻿using GraphQLDemo.Models;
 using GraphQLDemo.Repository;
+using HotChocolate.Subscriptions;
 
 public class Mutation
 {
@@ -10,5 +11,12 @@ public class Mutation
         _repo = repo;
     }
 
-    public Book AddBook(string title, string author) => _repo.AddBook(title, author);
+    public async Task<Book> AddBook(string title, string author, [Service] ITopicEventSender eventSender)
+    {
+        var newBook = _repo.AddBook(title, author);
+
+        await eventSender.SendAsync("BookAdded", newBook);
+
+        return newBook;
+    }
 }
